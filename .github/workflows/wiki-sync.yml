@@ -44,33 +44,42 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Multi-Platform Clients
         run: |
           python -m pip install --upgrade pip
           pip install requests qdrant-client neo4j
 
+      # 1. Kaggle Evidence Dataset Sync
       - name: Sync 3T Metrics to Kaggle Data Lake
         env:
+          PYTHONPATH: .
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: python3 scripts/kaggle_etl.py
 
+      # 2. Qdrant Cloud Vector Indexing (1024-dim BGE-M3)
       - name: Upsert 1024-dim Embeddings to Qdrant Cloud
         env:
+          PYTHONPATH: .
           QDRANT_URL: ${{ secrets.QDRANT_URL }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
         run: python3 scripts/qdrant_sync.py
 
+      # 3. Neo4j Knowledge Graph Migrations
       - name: Apply Cypher Graph Migrations to Neo4j AuraDB
         env:
+          PYTHONPATH: .
           NEO4J_URI: ${{ secrets.NEO4J_URI }}
           NEO4J_USERNAME: ${{ secrets.NEO4J_USERNAME }}
           NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
         run: python3 scripts/neo4j_sync.py
 
+      # 4. Scholarship 3T Wiki Synchronization
       - name: Publish Documentation to Miraheze MediaWiki
         env:
+          PYTHONPATH: .
           WIKI_API_URL: ${{ secrets.WIKI_API_URL }}
           WIKI_USER: ${{ secrets.WIKI_USER }}
           WIKI_PASSWORD: ${{ secrets.WIKI_PASSWORD }}
