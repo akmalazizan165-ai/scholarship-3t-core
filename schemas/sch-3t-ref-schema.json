@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schCode",
+    "programName",
+    "quota"
+  ],
+  "properties": {
+    "schCode": {
+      "type": "string",
+      "pattern": "^SCH-3T-\\d{4}-\\d{3}$"
+    }
+  }
+}

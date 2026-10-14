@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "a3pRefCode",
+    "title",
+    "region",
+    "pillar",
+    "proponent",
+    "epistemicStatus"
+  ],
+  "properties": {
+    "a3pRefCode": {
+      "type": "string",
+      "pattern": "^A3P-REF-\\d{4}-\\d{3}$"
+    }
+  }
+}
